@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Layout, Text, Button, Input, TopNavigation, Divider, List } from '@ui-kitten/components';
+import { ApplicationProvider, Layout, Text, Button, Input, TopNavigation, Divider, List, Spinner, Card, Modal } from '@ui-kitten/components';
 import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import VaxLocItem from './VaxLocItem.js';
@@ -35,6 +35,8 @@ export default function App() {
   const [csrf, setCSRF] = useState(null)
   const [locations, setLocations] = useState(null)
   const [notificationInterval, setInterval] = useState(10)
+  const [loading, setLoading] = useState(false)
+  const [notifVis, setNotifVis] = useState(false)
   const notificationListener = useRef();
   const responseListener = useRef();
   
@@ -86,6 +88,7 @@ export default function App() {
 
   const checkVacTrash = () => {
     
+    setLoading(true)
     fetch(baseURL + '#location-selector', {
       method: 'POST',
       headers: {
@@ -117,6 +120,7 @@ export default function App() {
         vaxLocs.push(locationInfo);
       }
       setLocations(vaxLocs)
+      setLoading(false)
     });
   }
   
@@ -133,6 +137,7 @@ export default function App() {
   }
 
   const setBackgroundTimer = () => {
+    setNotifVis(true)
     TaskManager.defineTask('CHECK_TRASHVAX_STATUS', () => {
       try {
         updateVaxTrashStatus()
@@ -190,6 +195,11 @@ export default function App() {
             </Button>
           </Layout>
         </Layout>
+        {loading && 
+          <Layout style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+            <Spinner size='large' />
+          </Layout>
+        }
       </ApplicationProvider>
     );
   } else {
@@ -219,26 +229,45 @@ export default function App() {
               </Button>
             </Layout>
           </Layout>
-          <Text category='h4'>Locations in your region ({locations.length})</Text>
-          <Layout style={{marginVertical: 10}}>
-            <List
-              style={styles.container}
-              data={locations}
-              renderItem={VaxLocItem}
-              ItemSeparatorComponent={Divider}
-            >
-            </List>
-          </Layout>
-          <Layout style={{alignItems: 'center', alignSelf: 'center',position: 'absolute', bottom: 0}}>
-            <Text category='h6' style={{marginVertical:10}}>Set interval (minutes) for the app to check if there are vaccines available at the above locations</Text>
-              <NumericInput value={notificationInterval} onChange={(newInterval) => setInterval(newInterval)}/>
-            <Button
-              onPress={setBackgroundTimer}
-              style={{alignSelf: 'center', width: '100%', marginVertical: 20, height: 50}}
-            >
-              <Text>Set Notification</Text>
-            </Button>
-          </Layout>
+          {loading ? 
+            <Layout style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <Spinner size='large' />
+            </Layout>
+            :
+            <Layout style={{flex: 1, padding: 30}}>
+              <Text category='h4'>Locations in your region ({locations.length})</Text>
+              <Layout style={{marginVertical: 10}}>
+                {locations.length === 0 ? 
+                  <Text>No locations in your area</Text> :
+                  <List
+                    style={styles.container}
+                    data={locations}
+                    renderItem={VaxLocItem}
+                    ItemSeparatorComponent={Divider}
+                  >
+                  </List>
+                }
+              </Layout>
+              <Layout style={{alignItems: 'center', alignSelf: 'center',position: 'absolute', bottom: 0}}>
+                <Text category='h6' style={{marginVertical:10}}>Set interval (minutes) for the app to check if there are vaccines available at the above locations</Text>
+                  <NumericInput value={notificationInterval} onChange={(newInterval) => setInterval(newInterval)}/>
+                <Modal visible={notifVis}>
+                  <Card>
+                    <Text>Notifications have been set. We'll inform you when a vaccine is available.</Text>
+                    <Button onPress={() => setNotifVis(false)}>
+                      Dismiss
+                    </Button>
+                  </Card>
+                </Modal>
+                <Button
+                  onPress={setBackgroundTimer}
+                  style={{alignSelf: 'center', width: '100%', marginVertical: 20, height: 50}}
+                >
+                  <Text>Set Notification</Text>
+                </Button>
+              </Layout>
+            </Layout>
+          }
         </Layout>
       </ApplicationProvider>
     )
