@@ -13,11 +13,11 @@ Set a time interval for how often to check if vaccines are available for the sel
 
 App must remain running in the background to provide notifications
 
-# Disclaimer
+# Disclaimers
 * I haven't had the opportunity to properly test the app for when a location actually becomes available, as I wouldn't know what the website would say in case there is a vaccine. I'm not a software developer, and I don't guarantee the app works perfectly.
 * You still have to make sure to bring a valid ID and checklist as specified on the prullenbakvaccin.nl website.
 
 
-Screenshots:
+# Screenshots
 ![TrashVax_1](https://user-images.githubusercontent.com/28184973/118396221-d14b2800-b64e-11eb-9487-593b3ac017b8.jpg)
 ![TrashVax_2](https://user-images.githubusercontent.com/28184973/118396223-d314eb80-b64e-11eb-8c48-373bf409bf90.jpg)
