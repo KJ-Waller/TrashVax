@@ -2,7 +2,7 @@
 Android app (made in React Native) for checking www.prullenbakvaccin.nl. You can set notifications to be informed when vaccins are available in your area.
 
 # Installation
-To install the app, click on the .apk file above, then download from github onto your Android device. Once downloaded, install the apk file.
+To install the app, click on the .apk file above, then download from github onto your Android device (or click [this link to download](https://github.com/KJ-Waller/TrashVax/raw/main/TrashVax-f331aa55817545cdbcfd7971c9c7eea7-signed.apk). Once downloaded, install the apk file.
 
 # Usage
 Open the app, fill in your postal code, and hit the search button.
