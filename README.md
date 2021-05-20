@@ -2,7 +2,7 @@
 Android app (made in React Native) for checking www.prullenbakvaccin.nl. You can set notifications to be informed when vaccins are available in your area.
 
 # Installation
-To install the app, click on the .apk file above, then download from github onto your Android device (or click [this link to download](https://github.com/KJ-Waller/TrashVax/raw/main/TrashVax-f331aa55817545cdbcfd7971c9c7eea7-signed.apk). Once downloaded, install the apk file.
+To install the app, click on the .apk file above, then download from github onto your Android device (or click [this link to download](https://github.com/KJ-Waller/TrashVax/raw/main/TrashVax-65550f8c38614583857b8eace40f7ebe-signed.apk). Once downloaded, install the apk file.
 
 # Usage
 Open the app, fill in your postal code, and hit the search button.
@@ -20,5 +20,6 @@ App must remain running in the background to provide notifications
 
 
 # Screenshots
-![TrashVax_1](https://user-images.githubusercontent.com/28184973/118396221-d14b2800-b64e-11eb-9487-593b3ac017b8.jpg)
-![TrashVax_2](https://user-images.githubusercontent.com/28184973/118396223-d314eb80-b64e-11eb-8c48-373bf409bf90.jpg)
+![Screenshot_20210520-184419__01](https://user-images.githubusercontent.com/28184973/119033623-b7427a00-b9ad-11eb-958a-b849064977f5.jpg)
+![Screenshot_20210520-184750__01](https://user-images.githubusercontent.com/28184973/119033624-b7db1080-b9ad-11eb-9367-ef0a4a677dca.jpg)
+![Screenshot_20210520-204543__01__01__01__01__01__01](https://user-images.githubusercontent.com/28184973/119033618-b6114d00-b9ad-11eb-8a6f-7ed1390d4d0e.jpg)
