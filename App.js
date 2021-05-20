@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Layout, Text, Button, Input, TopNavigation, Divider, List, Spinner, Card, Modal, ViewPager, BottomNavigation, BottomNavigationTab } from '@ui-kitten/components';
+import { ApplicationProvider, IconRegistry, Layout, Text, Button, Input, TopNavigation, Divider, List, Spinner, Card, Modal, ViewPager, BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
 import Constants from 'expo-constants';
 import VaxLocItem from './VaxLocItem.js';
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
@@ -400,13 +401,30 @@ export default function App() {
       tx.executeSql(
         "select * from locs;",
         null, (_, {rows: {_array}}) => {
+
+          // Remember which postals have notifications set to on
+          let existingEnabledPostals = currSetNotifications.map((currNotif, i) => {
+            if (currNotif['notifs_on']) {
+              return currNotif['location']
+            }
+          })
+
+          // Create new notifications array and update currSetNotification
           let newNotifs = []
           for (let i = 0; i < _array.length; i++) {
+            let currPostal = _array[i]['location']
+            let enableNotifs
+            if (existingEnabledPostals.includes(currPostal)) {
+              enableNotifs = true
+            } else {
+              enableNotifs = false
+            }
             newNotifs.push({
-              "location": _array[i]["location"],
-              "notifs_on": false
+              "location": currPostal,
+              "notifs_on": enableNotifs
             })
           }
+
           setCurrentNotification(newNotifs)
         }
       )
@@ -552,96 +570,99 @@ export default function App() {
   }
 
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <Layout level='1'>
-        <TopNavigation 
-          alignment='center'
-          title={() => {return (
-            <Text category='h4'>TrashVax</Text>
-          )}}
-          style={{marginTop: 20}}
-        />
-        <Divider/>
-      </Layout>
-      <ViewPager
-        selectedIndex={pageIdx}
-        onSelect={idx => setPageIdx(idx)}
-      >
-        <Layout level='2' style={{marginHorizontal: 10}}>
-          <Layout style={{alignItems: 'center'}}>
-            <Text category='h4' style={{marginVertical: 10}}>Fill in your postal code here</Text>
-            <Layout style={{ flexDirection: 'row', marginVertical: 10}}>
-              <Input
-                placeholder='eg. 1234'
-                value={postal}
-                onChangeText={(postal) => setPostalCode(postal)}
-                onSubmitEditing={() => checkVacTrash(postal, false)}
-              />
-              <Button onPress={() => checkVacTrash(postal, false)}>
-                <Text>Search</Text>
-              </Button>
-            </Layout>
-          </Layout>
-          {loading ? 
-          <Layout style={{alignItems: 'center'}}>
-            <Spinner size='large' />
-          </Layout>
-          :
-          <Layout style={{justifyContent: 'space-between'}}>
-            {visibleLocations !== null && 
-            <Text category='h4'>Locations in your region ({visibleLocations.length})</Text>}
-            <Layout>
-              <LocationsList locs={visibleLocations}/>
-            </Layout>
-            {visibleLocations !== null && 
+    <>
+      <IconRegistry icons={EvaIconsPack}/>
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <Layout level='1'>
+          <TopNavigation 
+            alignment='center'
+            title={() => {return (
+              <Text category='h4'>TrashVax</Text>
+            )}}
+            style={{marginTop: 20}}
+          />
+          <Divider/>
+        </Layout>
+        <ViewPager
+          selectedIndex={pageIdx}
+          onSelect={idx => setPageIdx(idx)}
+        >
+          <Layout level='2' style={{marginHorizontal: 10}}>
             <Layout style={{alignItems: 'center'}}>
-              <Text category='h6' style={{marginVertical:10}}>
-                Set interval (seconds) for the app to check if there are vaccines available at the above locations
-              </Text>
-              <Modal visible={notifVis}>
-                <Card>
-                  <Text>Notification has been added, please enable it in the next screen.</Text>
-                  <Button onPress={() => setNotifVis(false)}>
-                    Dismiss
-                  </Button>
-                </Card>
-              </Modal>
-              <Button
-                onPress={() => {
-                  insertNotificationDB()
-                  registerBackgroundTask()
-                  setNotifVis(true)
-                }}
-                style={{alignSelf: 'center', width: '100%', marginVertical: 20, height: 50}}
-              >
-                <Text>Set Notification</Text>
-              </Button>
+              <Text category='h4' style={{marginVertical: 10}}>Fill in your postal code here</Text>
+              <Layout style={{ flexDirection: 'row', marginVertical: 10}}>
+                <Input
+                  placeholder='eg. 1234'
+                  value={postal}
+                  onChangeText={(postal) => setPostalCode(postal)}
+                  onSubmitEditing={() => checkVacTrash(postal, false)}
+                />
+                <Button onPress={() => checkVacTrash(postal, false)}>
+                  <Text>Search</Text>
+                </Button>
+              </Layout>
             </Layout>
+            {loading ? 
+            <Layout style={{alignItems: 'center'}}>
+              <Spinner size='large' />
+            </Layout>
+            :
+            <Layout style={{justifyContent: 'space-between'}}>
+              {visibleLocations !== null && 
+              <Text category='h4'>Locations in your region ({visibleLocations.length})</Text>}
+              <Layout>
+                <LocationsList locs={visibleLocations}/>
+              </Layout>
+              {visibleLocations !== null && 
+              <Layout style={{alignItems: 'center'}}>
+                <Text category='h6' style={{marginVertical:10}}>
+                  Set interval (seconds) for the app to check if there are vaccines available at the above locations
+                </Text>
+                <Modal visible={notifVis}>
+                  <Card>
+                    <Text>Notification has been added, please enable it in the next screen.</Text>
+                    <Button onPress={() => setNotifVis(false)}>
+                      Dismiss
+                    </Button>
+                  </Card>
+                </Modal>
+                <Button
+                  onPress={() => {
+                    insertNotificationDB()
+                    registerBackgroundTask()
+                    setNotifVis(true)
+                  }}
+                  style={{alignSelf: 'center', width: '100%', marginVertical: 20, height: 50}}
+                >
+                  <Text>Set Notification</Text>
+                </Button>
+              </Layout>
+              }
+                
+              </Layout>
             }
-              
-            </Layout>
-          }
-        </Layout>
-        <Layout level='2' style={{justifyContent: 'space-between'}}>
-          <Text category='h4' style={{marginVertical: 10, alignSelf: 'center'}}>View/Edit notifications</Text>
-          <Layout style={{alignContent: 'center'}}>
-            <NotificationsList notifs={currSetNotifications}/>
           </Layout>
-        </Layout>
-      </ViewPager>
-      <BottomNavigation
-        selectedIndex={pageIdx}
-        onSelect={idx => setPageIdx(idx)}
-        style={{position: 'absolute', bottom: 0}}
-      >
-        <BottomNavigationTab 
-          title='Set New Notification'
-        />
-        <BottomNavigationTab 
-          title='View Notifications'
-        />
-      </BottomNavigation>
-    </ApplicationProvider>
+          <Layout level='2' style={{justifyContent: 'space-between'}}>
+            <Text category='h4' style={{marginVertical: 10, alignSelf: 'center'}}>View/Edit notifications</Text>
+            <Layout style={{alignContent: 'center'}}>
+              <NotificationsList notifs={currSetNotifications}/>
+            </Layout>
+          </Layout>
+        </ViewPager>
+        <BottomNavigation
+          selectedIndex={pageIdx}
+          onSelect={idx => setPageIdx(idx)}
+          style={{position: 'absolute', bottom: 0}}
+        >
+          <BottomNavigationTab 
+            title='Set New Notification'
+          />
+          <BottomNavigationTab 
+            title='View Notifications'
+          />
+        </BottomNavigation>
+      </ApplicationProvider>
+    </>
     )
 }
 
