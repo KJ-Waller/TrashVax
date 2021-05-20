@@ -1,4 +1,4 @@
-# TrashVax
+# TrashVax -- UPDATED
 Android app (made in React Native) for checking www.prullenbakvaccin.nl. You can set notifications to be informed when vaccins are available in your area.
 
 # Installation
