@@ -4,9 +4,9 @@
     "slug": "TrashVax",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/trashvax_icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/trashvax_splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,13 +21,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/trashvax_adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "io.trashvax.client"
+      "useNextNotificationsApi": true,
+      "icon": "./assets/trashvax_icon.png",
+      "package": "io.trashvax.client",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/trashvax_favicon.png"
+    },
+    "notification": {
+      "icon": "./assets/trashvax_icon.png"
     }
   }
 }
