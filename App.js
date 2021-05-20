@@ -615,9 +615,6 @@ export default function App() {
               </Layout>
               {visibleLocations !== null && 
               <Layout style={{alignItems: 'center'}}>
-                <Text category='h6' style={{marginVertical:10}}>
-                  Set interval (seconds) for the app to check if there are vaccines available at the above locations
-                </Text>
                 <Modal visible={notifVis}>
                   <Card>
                     <Text>Notification has been added, please enable it in the next screen.</Text>
