@@ -15,7 +15,8 @@ To install the app, click on the .apk file above, then download from github onto
 To test the app for notifications, type in "debug" in the postal code field > hit search > click "set notification" > click on "View notifications" > enable notification for "debug". You should be notified shortly that vaccines are available at 3 "fake" locations. 
 
 # Disclaimers
-* The app may break if "prullenbakvaccin.nl" changes their layout. 
+* The app may break if "prullenbakvaccin.nl" changes their layout.
+* Many Android phones have some kind of battery optimization in the settings. Please make exceptions for TrashVax and lock the app to consistently get notified for available vaccines.
 
 # Screenshots
 ![Screenshot_20210520-184419__01](https://user-images.githubusercontent.com/28184973/119033623-b7427a00-b9ad-11eb-958a-b849064977f5.jpg)
